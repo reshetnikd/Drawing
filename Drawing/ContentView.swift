@@ -11,7 +11,8 @@ import SwiftUI
 struct ContentView: View {
 //    @State private var petalOffset = -20.0
 //    @State private var petalWidth = 100.0
-    @State private var colorCycle = 0.0
+//    @State private var colorCycle = 0.0
+    @State private var amount: CGFloat = 0.0
     
     var body: some View {
 //        Path { path in
@@ -59,12 +60,61 @@ struct ContentView: View {
 //                .strokeBorder(ImagePaint(image: Image("Example"), scale: 0.1), lineWidth: 20)
 //                .frame(width: 300, height: 200)
 //        }
+//        VStack {
+//            ColorCyclingCircle(amount: self.colorCycle)
+//                .frame(width: 300, height: 300)
+//
+//            Slider(value: $colorCycle)
+//        }
+//        ZStack {
+//            Image("swift")
+//                .resizable()
+//
+//            Rectangle()
+//                .fill(Color.red)
+//                .blendMode(.multiply)
+//        }
+//        .frame(width: 400, height: 400)
+//        .clipped()
+//        Image("aura")
+//            .colorMultiply(.red)
         VStack {
-            ColorCyclingCircle(amount: self.colorCycle)
-                .frame(width: 300, height: 300)
+            ZStack {
+                Circle()
+//                    .fill(Color.red)
+                    .fill(Color(red: 1, green: 0, blue: 0))
+                    .frame(width: 200 * amount)
+                    .offset(x: -50, y: -80)
+                    .blendMode(.screen)
+
+                Circle()
+//                    .fill(Color.green)
+                    .fill(Color(red: 0, green: 1, blue: 0))
+                    .frame(width: 200 * amount)
+                    .offset(x: 50, y: -80)
+                    .blendMode(.screen)
+
+                Circle()
+//                    .fill(Color.blue)
+                    .fill(Color(red: 0, green: 0, blue: 1))
+                    .frame(width: 200 * amount)
+                    .blendMode(.screen)
+            }
+            .frame(width: 300, height: 300)
+
+            Slider(value: $amount)
+                .padding()
             
-            Slider(value: $colorCycle)
+            Image("aura")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200)
+                .saturation(Double(amount))
+                .blur(radius: (1 - amount) * 20)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black)
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
@@ -77,11 +127,11 @@ struct ColorCyclingCircle: View {
             ForEach(0..<steps) { value in
                 Circle()
                     .inset(by: CGFloat(value))
-//                    .strokeBorder(self.color(for: value, brightness: 1), lineWidth: 2)
-                .strokeBorder(LinearGradient(gradient: Gradient(colors: [
-                    self.color(for: value, brightness: 1),
-                    self.color(for: value, brightness: 0.5)
-                ]), startPoint: .top, endPoint: .bottom), lineWidth: 2)
+                    //                    .strokeBorder(self.color(for: value, brightness: 1), lineWidth: 2)
+                    .strokeBorder(LinearGradient(gradient: Gradient(colors: [
+                        self.color(for: value, brightness: 1),
+                        self.color(for: value, brightness: 0.5)
+                    ]), startPoint: .top, endPoint: .bottom), lineWidth: 2)
             }
         }
         .drawingGroup()
@@ -153,7 +203,7 @@ struct Arc: InsettableShape {
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-//        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
+        //        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
         
         let rotationAdjustment = Angle.degrees(90)
         let modifiedStart = startAngle - rotationAdjustment
