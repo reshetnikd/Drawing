@@ -16,11 +16,12 @@ struct ContentView: View {
 //    @State private var insetAmount: CGFloat = 50
 //    @State private var rows = 4
 //    @State private var columns = 4
-    @State private var innerRadius = 125.0
-    @State private var outerRadius = 75.0
-    @State private var distance = 25.0
-    @State private var amount: CGFloat = 1.0
-    @State private var hue = 0.6
+//    @State private var innerRadius = 125.0
+//    @State private var outerRadius = 75.0
+//    @State private var distance = 25.0
+//    @State private var amount: CGFloat = 1.0
+//    @State private var hue = 0.6
+    @State private var amount: CGFloat = 0.0
     
     var body: some View {
 //        Path { path in
@@ -168,27 +169,36 @@ struct ContentView: View {
 //                    .padding(.horizontal)
 //            }
 //        }
-        Arrow()
-        .stroke(Color.red, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+        Arrow(thickness: amount)
+            .stroke(Color.red, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+            .onTapGesture {
+                withAnimation {
+                    if self.amount > 0.25 {
+                        self.amount = 0.0
+                    } else {
+                        self.amount += 0.025
+                    }
+                }
+        }
     }
 }
 
 struct Arrow: Shape {
-//    var thickness: CGFloat
-//    var animatableData: CGFloat {
-//        get { thickness }
-//        set { self.thickness = newValue }
-//    }
+    var thickness: CGFloat
+    var animatableData: CGFloat {
+        get { thickness }
+        set { self.thickness = newValue }
+    }
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
         path.move(to: CGPoint(x: rect.midX, y: rect.minY))
         path.addLine(to: CGPoint(x: rect.midX * 0.5, y: rect.midY * 0.5))
-        path.addLine(to: CGPoint(x: rect.midX * 0.75, y: rect.midY * 0.5))
-        path.addLine(to: CGPoint(x: rect.midX * 0.75, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.midX * 1.25, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.midX * 1.25, y: rect.midY * 0.5))
+        path.addLine(to: CGPoint(x: rect.midX * (0.75 + self.thickness), y: rect.midY * 0.5))
+        path.addLine(to: CGPoint(x: rect.midX * (0.75 + self.thickness), y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX * (1.25 - self.thickness), y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX * (1.25 - self.thickness), y: rect.midY * 0.5))
         path.addLine(to: CGPoint(x: rect.midX * 1.5, y: rect.midY * 0.5))
         path.closeSubpath()
         
