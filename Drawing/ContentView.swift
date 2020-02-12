@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
 //    @State private var petalOffset = -20.0
 //    @State private var petalWidth = 100.0
-//    @State private var colorCycle = 0.0
+    @State private var colorCycle = 0.0
 //    @State private var amount: CGFloat = 0.0
 //    @State private var insetAmount: CGFloat = 50
 //    @State private var rows = 4
@@ -21,7 +21,7 @@ struct ContentView: View {
 //    @State private var distance = 25.0
 //    @State private var amount: CGFloat = 1.0
 //    @State private var hue = 0.6
-    @State private var amount: CGFloat = 0.0
+//    @State private var amount: CGFloat = 0.0
     
     var body: some View {
 //        Path { path in
@@ -69,12 +69,12 @@ struct ContentView: View {
 //                .strokeBorder(ImagePaint(image: Image("Example"), scale: 0.1), lineWidth: 20)
 //                .frame(width: 300, height: 200)
 //        }
-//        VStack {
-//            ColorCyclingCircle(amount: self.colorCycle)
-//                .frame(width: 300, height: 300)
-//
-//            Slider(value: $colorCycle)
-//        }
+        VStack {
+            ColorCyclingRectangle(amount: self.colorCycle)
+                .frame(width: 300, height: 300)
+
+            Slider(value: $colorCycle)
+        }
 //        ZStack {
 //            Image("swift")
 //                .resizable()
@@ -169,17 +169,47 @@ struct ContentView: View {
 //                    .padding(.horizontal)
 //            }
 //        }
-        Arrow(thickness: amount)
-            .stroke(Color.red, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-            .onTapGesture {
-                withAnimation {
-                    if self.amount > 0.25 {
-                        self.amount = 0.0
-                    } else {
-                        self.amount += 0.025
-                    }
-                }
+//        Arrow(thickness: amount)
+//            .stroke(Color.red, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+//            .onTapGesture {
+//                withAnimation {
+//                    if self.amount > 0.25 {
+//                        self.amount = 0.0
+//                    } else {
+//                        self.amount += 0.025
+//                    }
+//                }
+//        }
+    }
+}
+
+struct ColorCyclingRectangle: View {
+    var amount = 0.0
+    var steps = 100
+    
+    var body: some View {
+        ZStack {
+            ForEach(0..<steps) { value in
+                Rectangle()
+                    .inset(by: CGFloat(value))
+                    //                    .strokeBorder(self.color(for: value, brightness: 1), lineWidth: 2)
+                    .strokeBorder(LinearGradient(gradient: Gradient(colors: [
+                        self.color(for: value, brightness: 1),
+                        self.color(for: value, brightness: 0.5)
+                    ]), startPoint: .top, endPoint: .bottom), lineWidth: 2)
+            }
         }
+        .drawingGroup()
+    }
+    
+    func color(for value: Int, brightness: Double) -> Color {
+        var targetHue = Double(value) / Double(self.steps) + self.amount
+        
+        if targetHue > 1 {
+            targetHue -= 1
+        }
+        
+        return Color(hue: targetHue, saturation: 1, brightness: brightness)
     }
 }
 
