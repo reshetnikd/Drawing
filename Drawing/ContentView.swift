@@ -137,37 +137,62 @@ struct ContentView: View {
 //                    self.columns = 16
 //                }
 //        }
-        VStack(spacing: 0) {
-            Spacer()
-            
-            Spirograph(innerRadius: Int(innerRadius), outerRadius: Int(outerRadius), distance: Int(distance), amount: amount)
-                .stroke(Color(hue: hue, saturation: 1, brightness: 1), lineWidth: 1)
-                .frame(width: 300, height: 300)
-            
-            Spacer()
-            
-            Group {
-                Text("Inner radius: \(Int(innerRadius))")
-                Slider(value: $innerRadius, in: 10...150, step: 1)
-                    .padding([.horizontal, .bottom])
-                
-                Text("Outer radius: \(Int(outerRadius))")
-                Slider(value: $outerRadius, in: 10...150, step: 1)
-                    .padding([.horizontal, .bottom])
-                
-                Text("Distance: \(Int(distance))")
-                Slider(value: $distance, in: 10...150, step: 1)
-                    .padding([.horizontal, .bottom])
-                
-                Text("Amount: \(amount, specifier: "%.2f")")
-                Slider(value: $amount)
-                    .padding([.horizontal, .bottom])
-                
-                Text("Color")
-                Slider(value: $hue)
-                    .padding(.horizontal)
-            }
-        }
+//        VStack(spacing: 0) {
+//            Spacer()
+//
+//            Spirograph(innerRadius: Int(innerRadius), outerRadius: Int(outerRadius), distance: Int(distance), amount: amount)
+//                .stroke(Color(hue: hue, saturation: 1, brightness: 1), lineWidth: 1)
+//                .frame(width: 300, height: 300)
+//
+//            Spacer()
+//
+//            Group {
+//                Text("Inner radius: \(Int(innerRadius))")
+//                Slider(value: $innerRadius, in: 10...150, step: 1)
+//                    .padding([.horizontal, .bottom])
+//
+//                Text("Outer radius: \(Int(outerRadius))")
+//                Slider(value: $outerRadius, in: 10...150, step: 1)
+//                    .padding([.horizontal, .bottom])
+//
+//                Text("Distance: \(Int(distance))")
+//                Slider(value: $distance, in: 10...150, step: 1)
+//                    .padding([.horizontal, .bottom])
+//
+//                Text("Amount: \(amount, specifier: "%.2f")")
+//                Slider(value: $amount)
+//                    .padding([.horizontal, .bottom])
+//
+//                Text("Color")
+//                Slider(value: $hue)
+//                    .padding(.horizontal)
+//            }
+//        }
+        Arrow()
+        .stroke(Color.red, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+    }
+}
+
+struct Arrow: Shape {
+//    var thickness: CGFloat
+//    var animatableData: CGFloat {
+//        get { thickness }
+//        set { self.thickness = newValue }
+//    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.midX * 0.5, y: rect.midY * 0.5))
+        path.addLine(to: CGPoint(x: rect.midX * 0.75, y: rect.midY * 0.5))
+        path.addLine(to: CGPoint(x: rect.midX * 0.75, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX * 1.25, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX * 1.25, y: rect.midY * 0.5))
+        path.addLine(to: CGPoint(x: rect.midX * 1.5, y: rect.midY * 0.5))
+        path.closeSubpath()
+        
+        return path
     }
 }
 
